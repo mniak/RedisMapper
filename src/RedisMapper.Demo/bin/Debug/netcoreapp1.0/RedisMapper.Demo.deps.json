@@ -1,0 +1,62 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v1.0",
+    "signature": "93719f1651ef769150ad55478d2b959f21914d20"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v1.0": {
+      "RedisMapper.Demo/1.0.0": {
+        "dependencies": {
+          "RedisMapper": "1.0.0"
+        },
+        "runtime": {
+          "RedisMapper.Demo.dll": {}
+        }
+      },
+      "StackExchange.Redis/1.1.608": {
+        "dependencies": {
+          "System.Collections.NonGeneric": "4.0.1"
+        },
+        "runtime": {
+          "lib/netstandard1.5/StackExchange.Redis.dll": {}
+        }
+      },
+      "System.Collections.NonGeneric/4.0.1": {
+        "runtime": {
+          "lib/netstandard1.3/System.Collections.NonGeneric.dll": {}
+        }
+      },
+      "RedisMapper/1.0.0": {
+        "dependencies": {
+          "StackExchange.Redis": "1.1.608"
+        },
+        "runtime": {
+          "RedisMapper.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "RedisMapper.Demo/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "StackExchange.Redis/1.1.608": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SXorfrt0kXU1ueYRvdZcZ87da7o75j0LTrOtRD7xbD1b/AhnL9nTohmHfz4Ob7ENwf7ecxl1L3vmSET3nemz7w=="
+    },
+    "System.Collections.NonGeneric/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hMxFT2RhhlffyCdKLDXjx8WEC5JfCvNozAZxCablAuFRH74SCV4AgzE8yJCh/73bFnEoZgJ9MJmkjQ0dJmnKqA=="
+    },
+    "RedisMapper/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

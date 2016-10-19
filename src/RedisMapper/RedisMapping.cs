@@ -33,6 +33,22 @@ namespace RedisMapper
 
         }
 
+        public RedisMapping(MemberInfo memberInfo, string fieldName) : this(memberInfo)
+        {
+            this.FieldName = fieldName;
+        }
+
+        public RedisValue FieldName { get; internal set; }
+        public RedisValue GetValue(object entity)
+        {
+            return this.innerGetValue(entity);
+        }
+        public void SetValue(object entity, RedisValue value)
+        {
+            this.innerSetValue(entity, value);
+        }
+
+        /* Private Methods */
         private object ToCLRValue(RedisValue value, Type propertyType)
         {
             if (propertyType == typeof(RedisValue)) return value;
@@ -48,7 +64,6 @@ namespace RedisMapper
             else if (propertyType == typeof(byte[])) return (byte[])value;
             else return value.ToString();
         }
-
         private RedisValue ToRedisValue(object value)
         {
             if (value is RedisValue) return (RedisValue)value;
@@ -63,21 +78,6 @@ namespace RedisMapper
             else if (value is string) return value as string;
             else if (value is byte[]) return (byte[])value;
             else return value.ToString();
-        }
-
-        public RedisMapping(MemberInfo memberInfo, string fieldName) : this(memberInfo)
-        {
-            this.FieldName = fieldName;
-        }
-
-        public RedisValue FieldName { get; internal set; }
-        public RedisValue GetValue(object entity)
-        {
-            return this.innerGetValue(entity);
-        }
-        public void SetValue(object entity, RedisValue value)
-        {
-            this.innerSetValue(entity, value);
         }
     }
 }

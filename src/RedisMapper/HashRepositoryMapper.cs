@@ -7,34 +7,34 @@ using System.Reflection;
 
 namespace RedisMapper
 {
-    internal class RedisRepositoryMapper<T> : IRedisRepositoryMapper<T>
+    internal class HashRepositoryMapper<T> : IHashRepositoryMapper<T>
     {
         private const string PREFIX = "map_";
 
-        string name;
-        RedisMapping idMapping;
-        Func<T> constructor;
-        List<RedisMapping> mappings;
+        private string name;
+        private RedisMapping idMapping;
+        private Func<T> constructor;
+        private List<RedisMapping> mappings;
 
         public bool IdAutonumeric { get; private set; }
 
-        public RedisRepositoryMapper()
+        public HashRepositoryMapper()
         {
             this.mappings = new List<RedisMapping>();
             this.constructor = () => Activator.CreateInstance<T>();
         }
-        public IRedisRepositoryMapper<T> SetConstructor(Func<T> constructor)
+        public IHashRepositoryMapper<T> SetConstructor(Func<T> constructor)
         {
             this.constructor = constructor;
             return this;
         }
-        public IRedisRepositoryMapper<T> SetName(string name)
+        public IHashRepositoryMapper<T> SetName(string name)
         {
             this.name = name;
             return this;
         }
 
-        public IRedisRepositoryMapper<T> MapId<TOut>(Expression<Func<T, TOut>> expression, bool autonumeric = false)
+        public IHashRepositoryMapper<T> MapId<TOut>(Expression<Func<T, TOut>> expression, bool autonumeric = false)
         {
             var member = GetMemberInfo(expression);
             this.idMapping = new RedisMapping(member);
@@ -42,25 +42,14 @@ namespace RedisMapper
             return this;
         }
 
-        public IRedisRepositoryMapper<T> Map<TOut>(Expression<Func<T, TOut>> expression, string fieldName = null)
+        public IHashRepositoryMapper<T> Map<TOut>(Expression<Func<T, TOut>> expression, string fieldName = null)
         {
             var member = GetMemberInfo(expression);
             var mapping = new RedisMapping(member, fieldName ?? member.Name);
             mappings.Add(mapping);
             return this;
         }
-
-        private static MemberInfo GetMemberInfo<TOut>(Expression<Func<T, TOut>> expression)
-        {
-            var me = expression.Body as MemberExpression;
-            var member = me?.Member;
-            if (member == null)
-                throw new ArgumentException("Supplied expression must be a MemberExpression", nameof(expression));
-            return member;
-        }
-
-
-
+   
         public IDictionary<RedisValue, RedisValue> GetDictionary(T entity)
         {
             var result = mappings.ToDictionary(
@@ -98,7 +87,6 @@ namespace RedisMapper
             var id = GetId(entity);
             return GetHashKey(id);
         }
-
         public string GetHashKey(RedisValue id)
         {
             var key = this.GetKey();
@@ -113,6 +101,16 @@ namespace RedisMapper
         {
             var key = this.GetKey();
             return $"{PREFIX}{key}_seq";
+        }
+
+        /* Private Methods */
+        private static MemberInfo GetMemberInfo<TOut>(Expression<Func<T, TOut>> expression)
+        {
+            var me = expression.Body as MemberExpression;
+            var member = me?.Member;
+            if (member == null)
+                throw new ArgumentException("Supplied expression must be a MemberExpression", nameof(expression));
+            return member;
         }
     }
 }
