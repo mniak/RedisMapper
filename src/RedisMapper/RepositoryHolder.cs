@@ -3,16 +3,16 @@ using System;
 using System.Collections.Generic;
 namespace RedisMapper
 {
-    public class RedisManager
+    public class RepositoryHolder
     {
         private readonly IDatabase database;
         private readonly Dictionary<Type, object> hashMappings;
 
         /// <summary>
-        /// Creates a new RedisManager.
+        /// Creates a new RepositoryHolder.
         /// </summary>
         /// <param name="database">The redis database to use</param>
-        public RedisManager(IDatabase database)
+        public RepositoryHolder(IDatabase database)
         {
             this.database = database;
             this.hashMappings = new Dictionary<Type, object>();

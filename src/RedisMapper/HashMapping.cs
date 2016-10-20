@@ -10,7 +10,7 @@ namespace RedisMapper
         public HashMapping()
         {
             this.Mappings = new List<HashFieldMapping>();
-            this.constructor = () => Activator.CreateInstance<T>();
+            this.Constructor = () => Activator.CreateInstance<T>();
         }
 
         public IDictionary<RedisValue, RedisValue> GetDictionary(T entity)
@@ -23,7 +23,7 @@ namespace RedisMapper
         }
         public T Parse(Dictionary<RedisValue, RedisValue> dict)
         {
-            var entity = constructor();
+            var entity = Constructor();
             foreach (var mapping in Mappings)
             {
                 var val = dict[mapping.FieldName];
@@ -68,7 +68,7 @@ namespace RedisMapper
 
         public string Name { get; internal set; }
         public HashFieldMapping IdMapping { get; internal set; }
-        public Func<T> constructor { get; internal set; }
+        public Func<T> Constructor { get; internal set; }
         public List<HashFieldMapping> Mappings { get; internal set; }
         public bool IdAutonumeric { get; internal set; }
         public bool IndexById { get; internal set; }

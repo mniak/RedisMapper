@@ -14,20 +14,26 @@ namespace RedisMapper
         }
         public HashRepositoryMapper<T> SetConstructor(Func<T> constructor)
         {
-            this.mapping.constructor = constructor;
+            mapping.Constructor = constructor;
             return this;
         }
         public HashRepositoryMapper<T> SetName(string name)
         {
+            if (name.Contains(":"))
+                throw new ArgumentException("The name of the hash has invalid chars", nameof(name));
             mapping.Name = name;
             return this;
         }
         public HashRepositoryMapper<T> MapId<TOut>(Expression<Func<T, TOut>> expression, bool autonumeric = false, bool index = false)
         {
+            if (mapping.IdMapping != null)
+                throw new InvalidOperationException("Only one ID field can be mapped.");
+
             var member = GetMemberInfo(expression);
-            this.mapping.IdMapping = new HashFieldMapping(member);
-            this.mapping.IdAutonumeric = autonumeric;
-            this.mapping.IndexById = index;
+            mapping.IdMapping = new HashFieldMapping(member);
+            mapping.IdAutonumeric = autonumeric;
+            mapping.IndexById = index;
+
             return this;
         }
         public HashRepositoryMapper<T> Map<TOut>(Expression<Func<T, TOut>> expression, string fieldName = null)

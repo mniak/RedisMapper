@@ -57,9 +57,9 @@ namespace RedisMapper
         {
             var entries = await database.HashGetAllAsync(mapping.GetHashKey(id));
 
-            // Removes from the "index" if not found
             if (!entries.Any() && IndexById)
             {
+                // Removes from all the indexes if not found
                 await database.SetRemoveAsync(mapping.GetIdSetKey(), id);
                 return default(T);
             }

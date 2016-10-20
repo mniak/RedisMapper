@@ -15,7 +15,7 @@ namespace RedisMapper.Demo
         private static async void RunProgram()
         {
             await Task.Delay(0);
-            var redisManager = new RedisManager(RedisHelper.Instance.Database);
+            var redisManager = new RepositoryHolder(RedisHelper.Instance.Database);
             redisManager.RegisterHash<User>(m =>
             {
                 m.SetName("users");
