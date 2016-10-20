@@ -1,44 +1,29 @@
 version: 1.0.{build}
 configuration: Release
 platform: Any CPU
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
 nuget:
   project_feed: true
   disable_publish_on_pr: true
 before_build:
 - cmd: dotnet restore
+- ps: 
 build:
   publish_nuget: true
   publish_nuget_symbols: true
   include_nuget_references: true
   verbosity: minimal
-assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '$(appveyor_build_version)'
-  assembly_file_version: '$(appveyor_build_version)'
-  assembly_informational_version: '$(appveyor_build_version)'
 after_build:
-- cmd: dotnet pack src/RedisMapper
+- cmd: dotnet pack src/RedisMapper -o artifacts
 artifacts:
-- path: src/RedisMapper/bin/*/*.nupkg
-  name: RedisMapper.nupkg
+- path: artifacts/*.nupkg
+  name: NuGet
 deploy:
 - provider: NuGet
   api_key:
     secure: ZdKICz75mor9lkVFmXm4MKXFPD9as9oD9eTOvbHug5hLrwAZstwNUn9yeaL6Vp4x
   skip_symbols: false
-  artifact: redismapper.nupkg
+  artifact: NuGet
   on:
     branch: master
-notifications:
-- provider: Webhook
-  url: https://api.telegram.org/bot294164383:AAGHDHLPl2afHBkBZMZUGrIBF7-kMqlURio/sendMessage
-  method: POST
-  body: >-
-    {
-    	"text": "Notificacao do AppVeyor",
-    	"chat_id": "97599717"
-    }
-  on_build_success: false
-  on_build_failure: false
-  on_build_status_changed: false
