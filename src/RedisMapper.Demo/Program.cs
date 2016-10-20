@@ -32,9 +32,9 @@ namespace RedisMapper.Demo
                 LastName = "Parker",
             }, expiration: 30);
 
-            var user = await repo.RetrieveAsync(12);
+            var user = await repo.RetrieveAsync(8);
             if (user != null)
-                Console.WriteLine($"USER: {user.Id}\n\tNome={user.FirstName}\n\tSobrenome={user.LastName}");
+                Console.WriteLine($"USER: {user.Id}\n\tFirst Name:\t{user.FirstName}\n\tLast Name:\t{user.LastName}");
             else
                 Console.WriteLine("User not found!");
 
