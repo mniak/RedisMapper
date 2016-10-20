@@ -45,11 +45,17 @@ namespace RedisMapper
         /// <returns>The HashRepository. Null if the type is not registered.</returns>
         public HashRepository<T> GetHashRepository<T>() where T : class
         {
-            var mapping = this.hashMappings[typeof(T)] as HashMapping<T>;
+            var mapping = GetMapping<T>();
             if (mapping == null)
                 return null;
             var repo = new HashRepository<T>(database, mapping);
             return repo;
+        }
+
+        /* Private Methods */
+        private HashMapping<T> GetMapping<T>() where T : class
+        {
+            return this.hashMappings[typeof(T)] as HashMapping<T>;
         }
     }
 }

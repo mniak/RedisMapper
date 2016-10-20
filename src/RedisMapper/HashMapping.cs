@@ -71,5 +71,6 @@ namespace RedisMapper
         public Func<T> constructor { get; internal set; }
         public List<HashFieldMapping> Mappings { get; internal set; }
         public bool IdAutonumeric { get; internal set; }
+        public bool IndexById { get; internal set; }
     }
 }

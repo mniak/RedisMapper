@@ -22,11 +22,12 @@ namespace RedisMapper
             mapping.Name = name;
             return this;
         }
-        public HashRepositoryMapper<T> MapId<TOut>(Expression<Func<T, TOut>> expression, bool autonumeric = false)
+        public HashRepositoryMapper<T> MapId<TOut>(Expression<Func<T, TOut>> expression, bool autonumeric = false, bool index = false)
         {
             var member = GetMemberInfo(expression);
             this.mapping.IdMapping = new HashFieldMapping(member);
             this.mapping.IdAutonumeric = autonumeric;
+            this.mapping.IndexById = index;
             return this;
         }
         public HashRepositoryMapper<T> Map<TOut>(Expression<Func<T, TOut>> expression, string fieldName = null)

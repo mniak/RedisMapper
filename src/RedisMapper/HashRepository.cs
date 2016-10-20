@@ -15,10 +15,6 @@ namespace RedisMapper
         internal readonly IDatabase database;
         internal readonly HashMapping<T> mapping;
 
-        /// <summary>
-        /// Creates a new instance of a HashRepository.
-        /// </summary>
-        /// <param name="database">The Redis database</param>
         internal HashRepository(IDatabase database, HashMapping<T> mapping)
         {
             this.database = database;
@@ -41,10 +37,15 @@ namespace RedisMapper
                 mapping.SetId(obj, id);
             }
             var key = mapping.GetHashKey(id);
+
             if (expiration <= 0) await database.KeyPersistAsync(key);
             await database.HashSetAsync(key, dict.Select(kv => new HashEntry(kv.Key, kv.Value)).ToArray());
             if (expiration > 0) await database.KeyExpireAsync(key, new TimeSpan(0, 0, expiration));
-            await database.SetAddAsync(mapping.GetIdSetKey(), id);
+
+            if (IndexById)
+            {
+                await database.SetAddAsync(mapping.GetIdSetKey(), id);
+            }
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace RedisMapper
             var entries = await database.HashGetAllAsync(mapping.GetHashKey(id));
 
             // Removes from the "index" if not found
-            if (!entries.Any())
+            if (!entries.Any() && IndexById)
             {
                 await database.SetRemoveAsync(mapping.GetIdSetKey(), id);
                 return default(T);
@@ -69,13 +70,23 @@ namespace RedisMapper
         }
 
         /// <summary>
-        /// Get all the IDs from the "index". Some IDs can actually reference expired objects.
+        /// Get all the IDs from the index. 
+        /// Some IDs can actually reference expired objects.
+        /// **Important:** If the value of the property `IndexById` is false, a NotSupportedException will be thrown.
         /// </summary>
         /// <returns></returns>
         public async Task<IEnumerable<RedisValue>> GetIdsAsync()
         {
+            if (!IndexById)
+                throw new NotSupportedException("The IDs cannot be retrieved because the ID mapper was not set parameter `index=true.`");
             var key = mapping.GetIdSetKey();
             return await database.SetMembersAsync(key);
         }
+
+        /// <summary>
+        /// Indicates if this repository is indexed by the id.
+        /// This value is set in the mapper using paramenter `index` of the method `.MapId()`.
+        /// </summary>
+        public bool IndexById { get { return this.mapping.IndexById; } }
     }
 }

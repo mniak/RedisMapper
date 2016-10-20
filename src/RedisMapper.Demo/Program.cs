@@ -19,7 +19,7 @@ namespace RedisMapper.Demo
             redisManager.RegisterHash<User>(m =>
             {
                 m.SetName("users");
-                m.MapId(x => x.Id);
+                m.MapId(x => x.Id, index: true);
                 m.Map(x => x.FirstName, "first_name");
                 m.Map(x => x.LastName, "last_name");
             });
