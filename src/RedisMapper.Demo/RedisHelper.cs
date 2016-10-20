@@ -15,7 +15,5 @@ namespace RedisMapper.Demo
         }
         public ConnectionMultiplexer Connection { get; private set; }
         public IDatabase Database { get; private set; }
-
-
     }
 }

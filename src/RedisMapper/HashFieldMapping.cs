@@ -4,13 +4,13 @@ using System.Reflection;
 
 namespace RedisMapper
 {
-    internal class RedisMapping
+    internal class HashFieldMapping
     {
         private Func<object, RedisValue> innerGetValue;
         private Action<object, RedisValue> innerSetValue;
         private readonly MemberInfo memberInfo;
 
-        public RedisMapping(MemberInfo member)
+        public HashFieldMapping(MemberInfo member)
         {
             this.memberInfo = member;
 
@@ -33,7 +33,7 @@ namespace RedisMapper
 
         }
 
-        public RedisMapping(MemberInfo memberInfo, string fieldName) : this(memberInfo)
+        public HashFieldMapping(MemberInfo memberInfo, string fieldName) : this(memberInfo)
         {
             this.FieldName = fieldName;
         }
