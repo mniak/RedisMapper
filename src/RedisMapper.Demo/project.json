@@ -8,7 +8,7 @@
       "type": "platform",
       "version": "1.0.0"
     },
-    "RedisMapper": "1.0.0-*"
+    "RedisMapper": "0.0.1-*"
   },
   "frameworks": {
     "netcoreapp1.0": {
