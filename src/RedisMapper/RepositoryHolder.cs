@@ -22,7 +22,7 @@ namespace RedisMapper
         /// </summary>
         /// <typeparam name="T">The type to register</typeparam>
         /// <param name="action">The mapper delegate</param>
-        public void RegisterHash<T>(Action<HashRepositoryMapper<T>> mapperAction) where T : class
+        public void RegisterHash<T>(Action<HashRepositoryMapper<T>> mapperAction) where T : class, new()
         {
             var mapping = new HashMapping<T>();
             mapperAction(new HashRepositoryMapper<T>(mapping));
@@ -33,7 +33,7 @@ namespace RedisMapper
         /// Unregister a hash mapper.
         /// </summary>
         /// <typeparam name="T">The type to unregister</typeparam>
-        public void UnregisterHash<T>() where T : class
+        public void UnregisterHash<T>() where T : class, new()
         {
             this.hashMappings.Remove(typeof(T));
         }
@@ -43,7 +43,7 @@ namespace RedisMapper
         /// </summary>
         /// <typeparam name="T">A registered type</typeparam>
         /// <returns>The HashRepository. Null if the type is not registered.</returns>
-        public HashRepository<T> GetHashRepository<T>() where T : class
+        public HashRepository<T> GetHashRepository<T>() where T : class, new()
         {
             var mapping = GetMapping<T>();
             if (mapping == null)
@@ -53,7 +53,7 @@ namespace RedisMapper
         }
 
         /* Private Methods */
-        private HashMapping<T> GetMapping<T>() where T : class
+        private HashMapping<T> GetMapping<T>() where T : class, new()
         {
             return this.hashMappings[typeof(T)] as HashMapping<T>;
         }

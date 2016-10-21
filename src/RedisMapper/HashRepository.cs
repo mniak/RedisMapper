@@ -10,7 +10,7 @@ namespace RedisMapper
     /// Stores and retrieves instances of the informed type as Redis hashes.
     /// </summary>
     /// <typeparam name="T">The type of the objects to store. It must be a referece type.</typeparam>
-    public class HashRepository<T> where T : class
+    public class HashRepository<T> where T : class, new()
     {
         internal readonly IDatabase database;
         internal readonly HashMapping<T> mapping;
