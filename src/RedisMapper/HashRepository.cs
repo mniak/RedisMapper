@@ -26,7 +26,7 @@ namespace RedisMapper
         /// </summary>
         /// <param name="obj">The object to store</param>
         /// <param name="expiration">Optional expiration in seconds</param>
-        public async void StoreAsync(T obj, int expiration = 0)
+        public async Task StoreAsync(T obj, int expiration = 0)
         {
             var dict = mapping.GetDictionary(obj);
             var id = mapping.GetId(obj);
