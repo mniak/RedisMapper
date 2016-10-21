@@ -12,11 +12,6 @@ namespace RedisMapper
         {
             this.mapping = mapping;
         }
-        public HashRepositoryMapper<T> SetConstructor(Func<T> constructor)
-        {
-            mapping.Constructor = constructor;
-            return this;
-        }
         public HashRepositoryMapper<T> SetName(string name)
         {
             if (name.Contains(":"))
