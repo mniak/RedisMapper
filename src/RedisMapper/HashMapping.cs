@@ -9,24 +9,22 @@ namespace RedisMapper
     {
         public HashMapping()
         {
-            this.Mappings = new List<HashFieldMapping>();
+            this.Fields = new List<HashFieldMapping>();
         }
 
-        public IDictionary<RedisValue, RedisValue> GetDictionary(T entity)
+        public HashEntry[] GetEntries(T entity)
         {
-            var result = Mappings.ToDictionary(
-                x => x.FieldName,
-                x => x.GetValue(entity)
-                );
+            var result = Fields
+                .SelectMany(f => f.GetEntries(entity))
+                .ToArray();
             return result;
         }
-        public T Parse(Dictionary<RedisValue, RedisValue> dict)
+        public T Parse(HashEntry[] entries)
         {
             var entity = Activator.CreateInstance<T>();
-            foreach (var mapping in Mappings)
+            foreach (var mapping in Fields)
             {
-                var val = dict[mapping.FieldName];
-                mapping.SetValue(entity, val);
+                mapping.ReadFromEntries(entity, entries);
             }
             return entity;
         }
@@ -67,7 +65,7 @@ namespace RedisMapper
 
         public string Name { get; internal set; }
         public HashFieldMapping IdMapping { get; internal set; }
-        public List<HashFieldMapping> Mappings { get; internal set; }
+        public List<HashFieldMapping> Fields { get; internal set; }
         public bool IdAutonumeric { get; internal set; }
         public bool IndexById { get; internal set; }
     }

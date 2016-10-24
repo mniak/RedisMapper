@@ -8,5 +8,6 @@ namespace RedisMapper.Demo
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<string> Strings { get; set; }
+        public Dictionary<string, string> Entries { get; set; }
     }
 }

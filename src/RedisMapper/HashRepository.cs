@@ -28,7 +28,7 @@ namespace RedisMapper
         /// <param name="expiration">Optional expiration in seconds</param>
         public async Task StoreAsync(T obj, int expiration = 0)
         {
-            var dict = mapping.GetDictionary(obj);
+            var entries = mapping.GetEntries(obj);
             var id = mapping.GetId(obj);
 
             if (id == null && mapping.IdAutonumeric)
@@ -39,7 +39,7 @@ namespace RedisMapper
             var key = mapping.GetHashKey(id);
 
             if (expiration <= 0) await database.KeyPersistAsync(key);
-            await database.HashSetAsync(key, dict.Select(kv => new HashEntry(kv.Key, kv.Value)).ToArray());
+            await database.HashSetAsync(key, entries);
             if (expiration > 0) await database.KeyExpireAsync(key, new TimeSpan(0, 0, expiration));
 
             if (IndexById)
@@ -63,8 +63,7 @@ namespace RedisMapper
                 await database.SetRemoveAsync(mapping.GetIdSetKey(), id);
                 return default(T);
             }
-            var dict = entries.ToDictionary(x => x.Name, x => x.Value);
-            var entity = mapping.Parse(dict);
+            var entity = mapping.Parse(entries);
             mapping.SetId(entity, id);
             return entity;
         }

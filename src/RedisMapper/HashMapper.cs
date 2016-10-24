@@ -35,7 +35,7 @@ namespace RedisMapper
         {
             var member = GetMemberInfo(expression);
             var mapping = new HashFieldMapping(member, fieldName ?? member.Name);
-            this.mapping.Mappings.Add(mapping);
+            this.mapping.Fields.Add(mapping);
             return this;
         }
 

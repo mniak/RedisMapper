@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,14 +23,19 @@ namespace RedisMapper.Demo
                 m.MapId(x => x.Id, index: true);
                 m.Map(x => x.FirstName, "first_name");
                 m.Map(x => x.LastName, "last_name");
+                m.Map(x => x.Entries, "moreinfo");
             });
             var repo = redisManager.GetHashRepository<User>();
 
-            repo.StoreAsync(new User()
+            await repo.StoreAsync(new User()
             {
                 Id = 8,
                 FirstName = "Peter",
                 LastName = "Parker",
+                Entries = new Dictionary<string, string>() {
+                    { "wife_name", "Guadalupe" },
+                    { "kids", 3.ToString()},
+                },
             }, expiration: 30);
 
             var user = await repo.RetrieveAsync(8);
