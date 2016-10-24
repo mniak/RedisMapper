@@ -50,6 +50,7 @@ namespace RedisMapper.Demo
             {
                 Console.WriteLine($"id => {id}");
             }
+            await repo.DeleteByIdAsync(8);
 
             /* end */
             Console.WriteLine("--END--");

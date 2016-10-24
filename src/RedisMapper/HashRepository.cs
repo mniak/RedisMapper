@@ -59,7 +59,7 @@ namespace RedisMapper
 
             if (!entries.Any() && IndexById)
             {
-                // Removes from all the indexes if not found
+                // Removes from the index if not found
                 await database.SetRemoveAsync(mapping.GetIdSetKey(), id);
                 return default(T);
             }
@@ -80,6 +80,20 @@ namespace RedisMapper
                 throw new NotSupportedException("The IDs cannot be retrieved because the ID mapper was not set parameter `index=true.`");
             var key = mapping.GetIdSetKey();
             return await database.SetMembersAsync(key);
+        }
+
+        /// <summary>
+        /// Deletes a hash entry by the ID asynchronously
+        /// </summary>
+        /// <param name="id">The ID to remove from the hash</param>
+        /// <returns>The task</returns>
+        public async Task DeleteByIdAsync(RedisValue id)
+        {
+            var tasks = new List<Task>() {
+                database.KeyDeleteAsync(mapping.GetHashKey(id)),
+            };
+            if (IndexById) tasks.Add(database.SetRemoveAsync(mapping.GetIdSetKey(), id));
+            await Task.WhenAll(tasks);
         }
 
         /// <summary>
